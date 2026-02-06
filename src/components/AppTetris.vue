@@ -12,6 +12,8 @@
             :currentBlock="tetris.currentBlock"
             :fadingRows="tetris.fadingRows.value"
             :tile="tileSize"
+            :onKeyDown="tetris.handleKeyDown"
+            :onKeyUp="tetris.handleKeyUp"
         />
 
         <GameScreen

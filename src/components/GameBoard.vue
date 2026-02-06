@@ -1,7 +1,11 @@
 <template>
     <div
+        ref="gameBoardRef"
         class="az-board"
+        tabindex="0"
         :style="{ width: cols * tile + 'px', height: rows * tile + 'px' }"
+        @keydown="onKeyDown"
+        @keyup="onKeyUp"
     >
         <div
             v-for="(row, y) in board"
@@ -23,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import type { Ref, CSSProperties } from 'vue'
 import type { TetrisBlock } from '@/composables/useTetrisBlock'
 
@@ -32,7 +36,25 @@ const props = defineProps<{
     currentBlock: Ref<TetrisBlock | null>
     fadingRows: number[]
     tile: number
+    onKeyDown: (e: KeyboardEvent) => void
+    onKeyUp: (e: KeyboardEvent) => void
 }>()
+
+const gameBoardRef = ref<HTMLDivElement | null>(null)
+
+const focus = async () => {
+    await nextTick()
+    gameBoardRef.value?.focus()
+}
+
+watch(
+    () => props.currentBlock.value,
+    (block, prev) => {
+        if (block && !prev) {
+            focus()
+        }
+    }
+)
 
 const rows = computed(() => props.board.length)
 const cols = computed(() => (props.board[0]?.length ?? 0))
@@ -78,8 +100,22 @@ const getStyle = (x: number, y: number): CSSProperties => {
     flex-direction: column;
     background-color: #EBEBE7;
     background-image:
-        repeating-linear-gradient(45deg, #E7E7E2 25%, transparent 25%, transparent 75%, #E7E7E2 75%, #E7E7E2),
-        repeating-linear-gradient(45deg, #E7E7E2 25%, #EBEBE7 25%, #EBEBE7 75%, #E7E7E2 75%, #E7E7E2);
+        repeating-linear-gradient(
+            45deg,
+            #E7E7E2 25%,
+            transparent 25%,
+            transparent 75%,
+            #E7E7E2 75%,
+            #E7E7E2
+        ),
+        repeating-linear-gradient(
+            45deg,
+            #E7E7E2 25%,
+            #EBEBE7 25%,
+            #EBEBE7 75%,
+            #E7E7E2 75%,
+            #E7E7E2
+        );
     background-position: 0 0, 25px 25px;
     background-size: 50px 50px;
 

@@ -168,6 +168,16 @@ export const useTetrisGame = (
     }
 
     const handleKeyDown = (e: KeyboardEvent): void => {
+        if (
+            e.key === 'ArrowUp' ||
+            e.key === 'ArrowDown' ||
+            e.key === 'ArrowLeft' ||
+            e.key === 'ArrowRight' ||
+            e.key === ' '
+        ) {
+            e.preventDefault()
+        }
+
         if (e.key === ' ') {
             togglePause()
             return
@@ -198,8 +208,6 @@ export const useTetrisGame = (
         spawnNext()
         speed.value = normalSpeed
         restartInterval()
-        window.addEventListener('keydown', handleKeyDown)
-        window.addEventListener('keyup', handleKeyUp)
     }
 
     const restart = (): void => {
@@ -228,6 +236,8 @@ export const useTetrisGame = (
         moveLeft,
         moveRight,
         rotate,
-        togglePause
+        togglePause,
+        handleKeyDown,
+        handleKeyUp
     }
 }
