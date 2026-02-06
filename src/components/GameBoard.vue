@@ -118,6 +118,7 @@ const getStyle = (x: number, y: number): CSSProperties => {
         );
     background-position: 0 0, 25px 25px;
     background-size: 50px 50px;
+    outline: none;
 
     &__row {
         display: flex;
